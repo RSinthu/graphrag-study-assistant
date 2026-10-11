@@ -1,0 +1,25 @@
+[project]
+name = "graphrag-study-assistant-backend"
+version = "0.1.0"
+description = "FastAPI backend for the GraphRAG study assistant (LangChain + LangGraph + Neo4j)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "python-multipart",
+    "pydantic-settings",
+    "langchain",
+    "langchain-community",
+    "langchain-experimental",
+    "langchain-neo4j",
+    "langchain-anthropic",
+    "langgraph",
+    "pypdf",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "httpx",
+]
