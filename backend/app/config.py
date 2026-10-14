@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     vector_top_k: int = 4
 
     # React dev server
-    cors_origins: list[str] = ["http://localhost:5173"]
+    cors_origins: list[str] = ["http://localhost:5174"]
 
 
 @lru_cache
