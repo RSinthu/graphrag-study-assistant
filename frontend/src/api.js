@@ -1,35 +1,28 @@
-const BASE = "/api";
+import axios from "axios";
 
-async function request(path, options) {
-  let response;
-  try {
-    response = await fetch(BASE + path, options);
-  } catch {
-    throw new Error("Can't reach the backend. Is it running on port 8000?");
-  }
+const client = axios.create({ baseURL: "/api" });
 
-  const data = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    // FastAPI sends { detail: "..." } or, for validation errors, { detail: [{ msg }] }
+// Normalize errors: FastAPI sends { detail: "..." } or { detail: [{ msg }] }
+function handleError(err) {
+  if (err.response) {
+    const data = err.response.data ?? {};
     const detail = Array.isArray(data.detail) ? data.detail[0]?.msg : data.detail;
     if (detail) throw new Error(detail);
-    if (response.status >= 500) throw new Error("The backend isn't responding. Is it running on port 8000?");
-    throw new Error(`Request failed (${response.status})`);
+    if (err.response.status >= 500) throw new Error("The backend isn't responding. Is it running on port 8000?");
+    throw new Error(`Request failed (${err.response.status})`);
   }
-  return data;
+  // Network / no response
+  throw new Error("Can't reach the backend. Is it running on port 8000?");
 }
 
-export const getGraph = () => request("/graph");
+export const getGraph = () =>
+  client.get("/graph").then((r) => r.data).catch(handleError);
 
 export const askQuestion = (question) =>
-  request("/ask", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ question }),
-  });
+  client.post("/ask", { question }).then((r) => r.data).catch(handleError);
 
 export const uploadFile = (file) => {
   const form = new FormData();
   form.append("file", file);
-  return request("/upload", { method: "POST", body: form });
+  return client.post("/upload", form).then((r) => r.data).catch(handleError);
 };
