@@ -38,8 +38,4 @@ uv export --format requirements-txt --no-dev --no-hashes --no-emit-project --no-
   `vector_search` → `grade` → `generate`, with a `rewrite` loop when nothing
   useful is found.
 
-## Tests
 
-```bash
-uv run pytest
-```
