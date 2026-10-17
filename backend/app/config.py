@@ -29,8 +29,8 @@ class Settings(BaseSettings):
     max_retries: int = 2
     vector_top_k: int = 4
 
-    # React dev server
-    cors_origins: list[str] = ["http://localhost:5174"]
+    # React dev server (dev) or nginx container (Docker)
+    cors_origins: list[str] = ["http://localhost:5174", "http://localhost"]
 
 
 @lru_cache
